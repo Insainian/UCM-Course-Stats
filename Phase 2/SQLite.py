@@ -68,7 +68,7 @@ def createTables(_conn):
             FOREIGN KEY (courseID) REFERENCES Course (courseID))"""
         _conn.execute(sql)
 
-        # Create GradeScale
+    # Create GradeScale
         sql = """CREATE TABLE GradeScale (
                 courseID     INTEGER,
                 letterGrade  VARCHAR,
@@ -333,20 +333,20 @@ def insertStudentData(_conn):
     try:
         # Insert data into Student
         sql = """INSERT INTO Student (studentID, name, email)
-              VALUES (1, 'Person One', 'personone@example.com')"""
+              VALUES (100234789, 'Person One', 'personone@example.com')"""
         _conn.execute(sql)
 
         sql = """INSERT INTO Student (studentID, name, email)
-              VALUES (2, 'Person Two', 'persontwo@example.com')"""
+              VALUES (100875939, 'Person Two', 'persontwo@example.com')"""
         _conn.execute(sql)
         sql = """INSERT INTO Student (studentID, name, email)
-              VALUES (3, 'Person Three', 'personthree@example.com')"""
+              VALUES (100130448, 'Person Three', 'personthree@example.com')"""
         _conn.execute(sql)
         sql = """INSERT INTO Student (studentID, name, email)
-              VALUES (4, 'Person Four', 'personfour@example.com')"""
+              VALUES (100566998, 'Person Four', 'personfour@example.com')"""
         _conn.execute(sql)
         sql = """INSERT INTO Student (studentID, name, email)
-              VALUES (5, 'Person Five', 'personfive@example.com')"""
+              VALUES (100556497, 'Person Five', 'personfive@example.com')"""
         _conn.execute(sql)
 
         print("Success")
@@ -355,7 +355,6 @@ def insertStudentData(_conn):
 
     print(separator)
 
-
 def insertEnrollmentData(_conn):
     print(separator)
     print("Insert Enrollment Data")
@@ -363,19 +362,19 @@ def insertEnrollmentData(_conn):
     try:
         # Insert data into Enrollment
         sql = """INSERT INTO Enrollment (courseID, studentID)
-              VALUES (1, 1)"""
+              VALUES (1, 100234789)"""
         _conn.execute(sql)
         sql = """INSERT INTO Enrollment (courseID, studentID)
-              VALUES (2, 2)"""
+              VALUES (2, 100234789)"""
         _conn.execute(sql)
         sql = """INSERT INTO Enrollment (courseID, studentID)
-              VALUES (3, 3)"""
+              VALUES (3, 100130448)"""
         _conn.execute(sql)
         sql = """INSERT INTO Enrollment (courseID, studentID)
-              VALUES (4, 4)"""
+              VALUES (4, 100130448)"""
         _conn.execute(sql)
         sql = """INSERT INTO Enrollment (courseID, studentID)
-              VALUES (5, 5)"""
+              VALUES (5, 100130448)"""
         _conn.execute(sql)
 
         print("Success")
@@ -422,7 +421,7 @@ def insertPrereqData(_conn):
               VALUES (2, 1)"""
         _conn.execute(sql)
 
-        sql = """INSERT INTO Prereq (courseID, prereqID) VALUES (1, null)"""
+        sql = """INSERT INTO Prereq (courseID, prereqID) VALUES (1, 0)"""
         _conn.execute(sql)
 
         sql = """INSERT INTO Prereq (courseID, prereqID) VALUES (3, 1)"""
@@ -480,16 +479,261 @@ def populateTable(_conn):
     insertPrereqData(_conn)
     insertCoreqData(_conn)
 
+# -------- SELECT STATEMENTS ------------
+
+# Select full table statements
+def selectAllCourses(_conn):
+    print(separator)
+    print("Course Table")
+
+    try:
+        sql = """SELECT * FROM Course;"""
+        cur = _conn.cursor()
+        cur.execute(sql)
+
+        formatting = '{:>10} {:>10} {:>10} {:>10} {:>10}'
+        heading = formatting.format(
+            "courseID", "teacherID", "name", "semester", "section")
+        print(heading)
+        print(separator)
+
+        rows = cur.fetchall()
+        for row in rows:
+            print(formatting.format(
+                row[0], row[1], row[2], row[3], row[4]))
+
+    except Error as err:
+        print(err)
+
+    print(separator)
+
+def selectTeachers(_conn):
+    print(separator)
+    print("Teacher Table")
+
+    try:
+        sql = """SELECT * FROM Teacher;"""
+        cur = _conn.cursor()
+        cur.execute(sql)
+
+        formatting = '{:>10} {:>30} {:>10} {:>30} {:>10} {:>10}'
+        heading = formatting.format("courseID", "name", "rating", "email", "office", "title")
+        print(heading)
+        print(separator)
+
+        rows = cur.fetchall()
+        for row in rows:
+            print(formatting.format(row[0], row[1], row[2], row[3], row[4], row[5]))
+
+    except Error as err:
+        print(err)
+
+    print(separator)
+
+def selectSchedules(_conn):
+    print(separator)
+    print("Schedule Table")
+
+    try:
+        sql = """SELECT * FROM Schedule;"""
+        cur = _conn.cursor()
+        cur.execute(sql)
+
+        formatting = '{:>10} {:>10} {:>10} {:>10}'
+        heading = formatting.format("courseID", "day", "startTime", "endTime")
+        print(heading)
+        print(separator)
+
+        rows = cur.fetchall()
+        for row in rows:
+            print(formatting.format(row[0], row[1], row[2], row[3]))
+
+    except Error as err:
+        print(err)
+
+    print(separator)
+
+def selectGradeScale(_conn):
+    print(separator)
+    print("GradeScale Table")
+
+    try:
+        sql = """SELECT * FROM GradeScale;"""
+        cur = _conn.cursor()
+        cur.execute(sql)
+
+        formatting = '{:>10} {:>10} {:>10}'
+        heading = formatting.format("courseID", "letterGrade", "minimumScore")
+        print(heading)
+        print(separator)
+
+        rows = cur.fetchall()
+        for row in rows:
+            print(formatting.format(row[0], row[1], row[2]))
+
+    except Error as err:
+        print(err)
+
+    print(separator)
+
+def selectTextbook(_conn):
+    print(separator)
+    print("GradeScale Table")
+
+    try:
+        sql = """SELECT * FROM Textbook;"""
+        cur = _conn.cursor()
+        cur.execute(sql)
+
+        formatting = '{:>20} {:>20} {:>20}'
+        heading = formatting.format("ISBN", "name", "author")
+        print(heading)
+        print(separator)
+
+        rows = cur.fetchall()
+        for row in rows:
+            print(formatting.format(row[0], row[1], row[2]))
+
+    except Error as err:
+        print(err)
+
+    print(separator)
+
+def selectAllStudents(_conn):
+    print(separator)
+    print("Student Table")
+
+    try:
+        sql = """SELECT * FROM Student;"""
+        cur = _conn.cursor()
+        cur.execute(sql)
+        formatting = '{:>10} {:>20} {:>30}'
+        heading = formatting.format("studentID", "name", "email")
+        print(heading)
+        print(separator)
+
+        rows = cur.fetchall()
+        for row in rows:
+            print(formatting.format(row[0], row[1], row[2]))
+
+    except Error as err:
+        print(err)
+
+    print(separator)
+
+def selectAllEnrollments(_conn):
+    print(separator)
+    print("Enrollment Table")
+
+    try:
+        sql = """SELECT * FROM Enrollment;"""
+        cur = _conn.cursor()
+        cur.execute(sql)
+
+        formatting = '{:>10} {:>10}'
+        heading = formatting.format("courseID", "studentID")
+        print(heading)
+        print(separator)
+
+        rows = cur.fetchall()
+        for row in rows:
+            print(formatting.format(row[0], row[1]))
+
+    except Error as err:
+        print(err)
+
+    print(separator)
+
+def selectAllCourseTextbooks(_conn):
+    print(separator)
+    print("CourseTextbook Table")
+
+    try:
+        sql = """SELECT * FROM CourseTextbook;"""
+        cur = _conn.cursor()
+        cur.execute(sql)
+
+        formatting = '{:>10} {:>20}'
+        heading = formatting.format("courseID", "ISBN")
+        print(heading)
+        print(separator)
+
+        rows = cur.fetchall()
+        for row in rows:
+            print(formatting.format(row[0], row[1]))
+
+    except Error as err:
+        print(err)
+
+    print(separator)
+
+
+def selectAllPrereqs(_conn):
+    print(separator)
+    print("Prereq Table")
+
+    try:
+        sql = """SELECT * FROM Prereq;"""
+        cur = _conn.cursor()
+        cur.execute(sql)
+
+        formatting = '{:>10} {:>10}'
+        heading = formatting.format("courseID", "prereqID")
+        print(heading)
+        print(separator)
+
+        rows = cur.fetchall()
+        for row in rows:
+            print(formatting.format(row[0], row[1]))
+
+    except Error as err:
+        print(err)
+
+    print(separator)
+
+
+def selectAllCoreqs(_conn):
+    print(separator)
+    print("Coreq Table")
+
+    try:
+        sql = """SELECT * FROM Coreq;"""
+        cur = _conn.cursor()
+        cur.execute(sql)
+
+        formatting = '{:>10} {:>10}'
+        heading = formatting.format("courseID", "coreqID")
+        print(heading)
+        print(separator)
+
+        rows = cur.fetchall()
+        for row in rows:
+            print(formatting.format(row[0], row[1]))
+
+    except Error as err:
+        print(err)
+
+    print(separator)
+
 # Create a funciton for each sqlite query we want to do
 def main():
     database = r"courses.sql"
 
     conn = openConnection(database)
-    # with conn:
+    with conn:
     # Call function for querys
-    #     createTables(conn)
     #     dropTables(conn)
-    #     populateTable(conn)
+        # createTables(conn)
+        # populateTable(conn)
+    #     selectTeachers(conn)
+    #     selectSchedules(conn)
+    #     selectGradeScale(conn)
+    #     selectTextbook(conn)
+    #     selectAllStudents(conn)
+    #     selectAllEnrollments(conn)
+    #     selectAllCourseTextbooks(conn)
+        selectAllPrereqs(conn)
+        selectAllCoreqs(conn)
     closeConnection(conn, database)
 
 
