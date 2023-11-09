@@ -203,6 +203,12 @@ def insertCourseData(_conn):
         sql = """INSERT INTO Course (courseID, teacherID, name, semester, section)
               VALUES (2, 2, 'CSE 150', 'Spring', '3D')"""
         _conn.execute(sql)
+
+        sql = """INSERT INTO Course (courseID, teacherID, name, semester, section)
+              VALUES (6, 2, 'CSE 100', 'Fall', '5D')"""
+        _conn.execute(sql)
+
+        _conn.execute(sql)
         sql = """INSERT INTO Course (courseID, teacherID, name, semester, section)
               VALUES (3, 3, 'CSE 175', 'Fall', '2D')"""
         _conn.execute(sql)
@@ -399,6 +405,11 @@ def insertCourseTextbookData(_conn):
         sql = """INSERT INTO CourseTextbook (courseID, ISBN)
               VALUES (1, '978-3-16-148410-0')"""
         _conn.execute(sql)
+
+        sql = """INSERT INTO CourseTextbook (courseID, ISBN)
+              VALUES (1, '978-3-16-148415-2')"""
+        _conn.execute(sql)
+
         sql = """INSERT INTO CourseTextbook (courseID, ISBN)
               VALUES (2, '978-3-16-148411-7')"""
         _conn.execute(sql)
@@ -855,7 +866,7 @@ def selectCourseTeacher(_conn, _courseID):
     print("Course's Teacher(s)")
 
     try:
-        sql = """ SELECT Teacher.name, Course.name, Course.courseID FROM Course JOIN Teacher ON Course.teacherID = Teacher.teacherID WHERE Course.courseID = ?"""
+        sql = """SELECT Teacher.name, Course.name, Course.courseID FROM Course JOIN Teacher ON Course.teacherID = Teacher.teacherID WHERE Course.courseID = ?"""
         args = [_courseID]
         cur = _conn.cursor()
         cur.execute(sql, args)
@@ -873,6 +884,28 @@ def selectCourseTeacher(_conn, _courseID):
 
     print(separator)
 
+def selectTeacherCourse(_conn, _teacherID):
+    print(separator)
+    print("Courses taught by Teacher")
+
+    try:
+        sql = """SELECT Teacher.name, Course.name, Course.courseID FROM Course JOIN Teacher ON Course.teacherID = Teacher.teacherID WHERE Course.teacherID = ?"""
+        args = [_teacherID]
+        cur = _conn.cursor()
+        cur.execute(sql, args)
+
+        formatting = '{:>20} {:>10} {:>10}'
+        heading = formatting.format("teacherName", "courseName", "courseID")
+        print(heading)
+        print(separator)
+
+        rows = cur.fetchall()
+        for row in rows:
+            print(formatting.format(row[0], row[1], row[2]))
+    except Error as err:
+        print(err)
+
+    print(separator)
 
 def selectCourseTextbook(_conn, _courseID):
     print(separator)
@@ -1023,7 +1056,7 @@ def main():
     #     selectPersonalSchedule(conn, 100234789)
     #     deleteFromPersonalTable(conn, 100234789, 3)
     #     selectPersonalSchedule(conn, 100234789)
-    #     selectCourseTextbook(conn, 1)
+    #     selectCourseTextbook(conn, 2)
     #     selectCourseByName(conn, "CSE 111")
     #     selectCourseById(conn, 1)
     #     selectCourseTeacher(conn, 1)
