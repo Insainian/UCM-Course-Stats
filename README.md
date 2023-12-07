@@ -1,6 +1,6 @@
 # UCM Course Stats
 
-This is project is for UC Merced's CSE-111 Final Project. Our goal was to create a class 
+This project is for UC Merced's CSE-111 Final Project. Our goal was to create a class 
 scheduler that would make it easy for student's to digest all relevant course data and choose
 the courses best for them. To do this, we used [Postgres](https://www.postgresql.org/) and [Budibase](https://budibase.com/),
 both hosted on Docker.
